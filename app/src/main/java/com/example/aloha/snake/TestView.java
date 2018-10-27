@@ -30,4 +30,10 @@ public class TestView extends View {
         mPaint.setColor(Color.GREEN);
         canvas.drawCircle(500,500,200,mPaint);
     }
+
+    public void Draw(Canvas canvas){
+        Paint mPaint = new Paint();
+        mPaint.setColor(Color.GREEN);
+        canvas.drawCircle(500,500,200,mPaint);
+    }
 }
