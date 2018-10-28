@@ -1,5 +1,8 @@
 package com.example.aloha.snake;
 
+
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -16,5 +19,7 @@ public class MainActivity extends AppCompatActivity {
         GridBean.screenWidthPixels=dm.widthPixels;
         GameView gameView= new GameView(this);
         setContentView(gameView);
+
     }
+
 }

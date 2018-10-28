@@ -6,16 +6,19 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class GameView extends View {
     private Paint paint = new Paint();
 
     private GridBean gridBean;
     private SnakeBean snakeBean;
-
+    private Control control = Control.UP;
 
     public GameView(Context context) {
         super(context);
@@ -77,6 +80,88 @@ public class GameView extends View {
             int stopY = startY;
             canvas.drawLine(startX, startY, stopX, stopY, paint);
         }
+    }
+
+    public void refreshView(boolean isAdd){
+        List<PointBean> pointList = snakeBean.getSnake();
+        PointBean point = pointList.get(0);
+        PointBean pointNew = null;
+        if (control == Control.LEFT) {
+            pointNew = new PointBean(point.getX() - 1, point.getY());
+        } else if (control == Control.RIGHT) {
+            pointNew = new PointBean(point.getX() + 1, point.getY());
+        } else if (control == Control.UP) {
+            pointNew = new PointBean(point.getX(), point.getY() - 1);
+        } else if (control == Control.DOWN) {
+            pointNew = new PointBean(point.getX(), point.getY() + 1);
+        }
+        if (pointNew != null) {
+            pointList.add(0, pointNew);
+            if(!isAdd){
+                pointList.remove(pointList.get(pointList.size() - 1));
+            }
+        }
+
+        invalidate();
+        //此处只是刷新页面
+        //刷新页面会重新绘制
+    }
+    int x;
+    int y;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) { //通过手势来改变蛇体运动方向
+        int action = event.getAction()  & MotionEvent.ACTION_MASK;
+        LogUtil.e("x =" + x + " y = " + y + " action() = " + action);
+        // TODO Auto-generated method stub
+        if (action == KeyEvent.ACTION_DOWN) {
+            //每次Down事件，都置为Null
+            x = (int) (event.getX());
+            y = (int) (event.getY());
+        }
+        if (action== KeyEvent.ACTION_UP) {
+            //每次Down事件，都置为Null
+            int x = (int) (event.getX());
+            int y = (int) (event.getY());
+
+//            新建一个滑动方向，
+            Control control  = null ;
+            // 滑动方向x轴大说明滑动方向为 左右
+            if (Math.abs(x - this.x) > Math.abs(y - this.y)) {
+                if (x > this.x) {
+                    control = Control.RIGHT;
+                    LogUtil.i("用户右划了");
+                }
+                if (x < this.x) {
+                    control = Control.LEFT;
+                    LogUtil.i("用户左划了");
+                }
+            }else{
+                if (y < this.y) {
+                    control = Control.UP;
+                    LogUtil.i("用户上划了");
+                }
+                if (y > this.y) {
+                    control = Control.DOWN;
+                    LogUtil.i("用户下划了");
+                }
+            }
+
+            if (this.control == Control.UP || this.control == Control.DOWN) {
+                if(control==Control.UP ||Control.UP==Control.DOWN ){
+                    LogUtil.i("已经是上下移动了，滑动无效");
+                }else{
+                    this.control = control;
+                }
+            } else if (this.control == Control.LEFT || this.control == Control.RIGHT) {
+                if(control==Control.LEFT ||Control.UP==Control.RIGHT ){
+                    LogUtil.i("已经是左右移动了，滑动无效");
+                }else{
+                    this.control = control;
+                }
+            }
+        }
+        //Log.e(TAG, "after adjust mSnakeDirection = " + mSnakeDirection);
+        return super.onTouchEvent(event);
     }
 
 
