@@ -7,15 +7,15 @@ public class GridBean {
     public static int screenHeightPixels;
     public static int screenWidthPixels;
 
-    private int offset = 90 ;//偏移量，就是间距  上 左 右 间距一样
+    private int offset = 90 ;
 
-    private int gridSize = 30;//每行格子的数量
-    private int lineLength;//线的长度
-    private int gridWidth  ;//格子宽
+    private int gridSize = 30;
+    private int lineLength;
+    private int gridWidth  ;
 
     public GridBean() {
         lineLength = screenWidthPixels - offset * 2;
-        gridWidth = lineLength / gridSize;// 格子数量
+        gridWidth = lineLength / gridSize;
     }
 
     public int getOffset() {
